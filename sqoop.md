@@ -9,5 +9,21 @@ sqoop import-all-tables \
 --password=cloudera \
 --compression-codec=snappy \
 --as-avrodatafile \
---warehouse-dir=/usr/hive/warehouse
+--warehouse-dir=/user/hive/warehouse
+```
+
+### Verification
+When above command is complete, confirm that your Avro data files exist in HDFS.
+```
+hadoop fs -ls /user/hive/warehouse
+```
+Will show a folder for each of the tables.
+```
+hadoop fs -ls /user/hive/warehouse/categories
+```
+Will show the files that live inside of the "categories" folder.
+
+Sqoop should also have created schema files for this data in your home directory.
+```
+ls -l *.avsc
 ```

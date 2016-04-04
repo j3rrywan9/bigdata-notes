@@ -125,7 +125,17 @@ Usage
 Use the TOKENIZE function to split a string of words (all words in a single tuple) into a bag of words (each word in a single tuple).
 
 ## Quiz
+Set up input files in HDFS if you use mapreduce
 ```
 hdfs dfs -mkdir /user/cloudera/pigin
 hdfs dfs -put /home/cloudera/testfile* /user/cloudera/pigin
+```
+Set up an output folder in HDFS if you use mapreduce
+```
+hdfs dfs -mkdir /user/cloudera/pigoutnew
+```
+Clean up output folder before rerun
+```
+hdfs dfs -rm /user/cloudera/pigoutnew/word_counts_pig/*
+hdfs dfs -rmdir /user/cloudera/pigoutnew/word_counts_pig/
 ```

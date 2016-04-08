@@ -28,4 +28,19 @@ The Naive Bayes method is available in the Node Repository panel under "Analytic
 #### Naive Bayes Learner
 The "Naive Bayes Learner" node creates a Bayesian model from the input training data. It calculates the distributions and probabilities to define the Bayesian model's rules from the traning data.
 
-The [Iris data set](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data)
+### Decision Tree Assignment
+Create a KNIME workflow that utilizes the Decision Tree learning method to train a model on the Iris training data set.
+
+The Decision Tree method is available in the Node repository panel under "Analytics" -> "Mining" -> "Decision Tree" category. There are two different nodes: "Decision Tree Learner" and "Decision Tree Predictor".
+
+#### Decision Tree Learner
+The "Decision Tree Learner" node creates a Decision Tree model from the input training data.
+
+#### Decision Tree Predictor
+The "Decision Tree Predictor" node applies an existing Decision Tree model to the input data table.
+
+## Spark MLlib
+
+## Resources
+[The Adult data set](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data)
+[The Iris data set](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data)

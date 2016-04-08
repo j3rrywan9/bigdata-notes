@@ -42,5 +42,12 @@ The "Decision Tree Predictor" node applies an existing Decision Tree model to th
 ## Spark MLlib
 
 ## Resources
-[The Adult data set](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data)
-[The Iris data set](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data)
+### The Adult data set
+[Adult Data Set](http://archive.ics.uci.edu/ml/datasets/Adult)
+
+[Data](https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data)
+
+### The Iris data set
+[Iris Data Set](http://archive.ics.uci.edu/ml/datasets/Iris)
+
+[Data](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data)

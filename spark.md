@@ -36,6 +36,7 @@ sudo easy_install numpy==1.4.1
 ```
 
 ### Launch PySpark in IPython
+It is also possible to launch the PySpark shell in IPython, the enhanced Python interpreter. PySpark works with IPython 1.0.0 and later. To use IPython, set the **PYSPARK_DRIVER_PYTHON** variable to **ipython** when running **bin/pyspark**:
 ```
 PYSPARK_DRIVER_PYTHON=ipython pyspark
 ```
@@ -47,3 +48,35 @@ Spark SQL is a Spark module for structured data processing. Unlike the basic Spa
 A DataFrame is a distributed collection of data organized into named columns. It is conceptually equivalent to a table in a relational database or a data frame in R/Python, but with richer optimizations under the hood. DataFrames can be constructed from a wide array of sources such as: structured data files, tables in Hive, external databases, or existing RDDs.
 
 The DataFrames API is available in Scala, Java, Python, and R.
+
+### SQLContext
+The entry point into all functionality in Spark SQL is the SQLContext class, or one of its descendants.
+
+### Creating DataFrames
+With a SQLContext, applications can create DataFrames from an existing RDD, from a Hive table, or from data sources.
+
+## DataFrame Analytics Assignment
+```
+PYSPARK_DRIVER_PYTHON=ipython pyspark --packages com.databricks:spark-csv_2.10:1.3.0
+```
+
+```python
+yelp_df = sqlCtx.load(source = 'com.databricks.spark.csv', header = 'true', inferSchema = 'true', path = 'file:///usr/lib/hue/apps/search/examples/collections/solr_configs_yelp_demo/index_data.csv')
+
+yelp_df.printSchema()
+
+# The mean of the "cool" column across all of the dataset
+yelp_df.agg({"cool": "mean"}).collect()
+
+# Take into consideration only the records with a "review count" of 10 or more 
+useful_yelp_df = yelp_df.filter(yelp_df["review_count"] >= 10)
+
+# The average of the "cool" column for venues grouped by "stars"
+useful_yelp_df.groupBy("stars").avg("cool").show()
+
+# Take into consideration only the records with "open" state
+useful_open_yelp_df = useful_yelp_df.filter(useful_yelp_df["open"] == True)
+
+# The average of the "cool" column for venues grouped by "stars"
+useful_open_yelp_df.groupBy("stars").avg("cool").show()
+```

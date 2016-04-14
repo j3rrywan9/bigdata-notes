@@ -49,6 +49,28 @@ A DataFrame is a distributed collection of data organized into named columns. It
 
 The DataFrames API is available in Scala, Java, Python, and R.
 
+#### Load DataFrame from CSV
+```
+PYSPARK_DRIVER_PYTHON=ipython pyspark --packages com.databricks:spark-csv_2.10:1.3.0
+```
+
+Log analytics
+```
+sc._jsc.hadoopConfiguration().set('textinputformat.record.delimiter', '\r\n')
+```
+Read logs CSV
+```python
+logs_df = sqlCtx.load(source = 'com.databricks.spark.csv', header = 'true', inferSchema = 'true', path = 'file:///usr/lib/hue/apps/search/examples/collections/solr_configs_log_analytics_demo/index_data.csv')
+
+logs_df.count()
+
+logs_df.printSchema()
+
+from pyspark.sql.functions import desc
+
+logs_df.groupBy("code").count().orderBy(desc("count")).show()
+```
+
 ### SQLContext
 The entry point into all functionality in Spark SQL is the SQLContext class, or one of its descendants.
 
@@ -83,15 +105,15 @@ useful_open_yelp_df.groupBy("stars").avg("cool").show()
 
 ## Spark and Hive Assignment
 Q1: How many orders are in SUSPECTED_FRAUD status?
-```
+```python
 sqlCtx.sql("SELECT COUNT(*) FROM orders WHERE order_status == 'SUSPECTED_FRAUD'").show()
 ```
 Q2: Load the table "order_items" from Hive, find the total amount (sum of all "order_item_subtotal") for each order ("order_item_order_id"). What is the 3rd highest order amount?
-```
+```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from order_items group by order_item_order_id order by order_total desc limit 3").show()
 ```
 Q3: What is the average product price ("order_item_product_price") from products that belong to "COMPLETE" orders?
-```
+```python
 order_items = sqlCtx.sql("select * from order_items")
 
 orders = sqlCtx.sql("select * from orders")
@@ -111,10 +133,10 @@ oi_join_o.registerTempTable("oi_join_o_tbl")
 sqlCtx.sql("select avg(order_item_product_price) from oi_join_o_tbl where order_status = 'COMPLETE'").show()
 ```
 Q4: What is the maximum amount a single customer ordered?
-```
+```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status = 'COMPLETE' group by order_customer_id order by order_total desc limit 1").show()
-```
+```python
 Q5: Now let's focus on orders which are not complete. Find the total amount of each of those orders i.e. sum all the "order_item_subtotal" for each "order_id". What is the largest across all total amounts?
-```
+```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status <> 'COMPLETE' group by order_id order by order_total desc limit 1").show()
 ```

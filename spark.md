@@ -80,3 +80,41 @@ useful_open_yelp_df = useful_yelp_df.filter(useful_yelp_df["open"] == True)
 # The average of the "cool" column for venues grouped by "stars"
 useful_open_yelp_df.groupBy("stars").avg("cool").show()
 ```
+
+## Spark and Hive Assignment
+Q1: How many orders are in SUSPECTED_FRAUD status?
+```
+sqlCtx.sql("SELECT COUNT(*) FROM orders WHERE order_status == 'SUSPECTED_FRAUD'").show()
+```
+Q2: Load the table "order_items" from Hive, find the total amount (sum of all "order_item_subtotal") for each order ("order_item_order_id"). What is the 3rd highest order amount?
+```
+sqlCtx.sql("select sum(order_item_subtotal) as order_total from order_items group by order_item_order_id order by order_total desc limit 3").show()
+```
+Q3: What is the average product price ("order_item_product_price") from products that belong to "COMPLETE" orders?
+```
+order_items = sqlCtx.sql("select * from order_items")
+
+orders = sqlCtx.sql("select * from orders")
+
+order_items = sqlCtx.createDataFrame(order_items.rdd, order_items.schema)
+
+orders = sqlCtx.createDataFrame(orders.rdd, orders.schema)
+
+oi_join_o = sqlCtx.sql("select * from order_items oi inner join orders o on oi.order_item_order_id = o.order_id")
+
+oi_join_o.printSchema()
+
+oi_join_o.cache()
+
+oi_join_o.registerTempTable("oi_join_o_tbl")
+
+sqlCtx.sql("select avg(order_item_product_price) from oi_join_o_tbl where order_status = 'COMPLETE'").show()
+```
+Q4: What is the maximum amount a single customer ordered?
+```
+sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status = 'COMPLETE' group by order_customer_id order by order_total desc limit 1").show()
+```
+Q5: Now let's focus on orders which are not complete. Find the total amount of each of those orders i.e. sum all the "order_item_subtotal" for each "order_id". What is the largest across all total amounts?
+```
+sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status <> 'COMPLETE' group by order_id order by order_total desc limit 1").show()
+```

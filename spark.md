@@ -135,7 +135,7 @@ sqlCtx.sql("select avg(order_item_product_price) from oi_join_o_tbl where order_
 Q4: What is the maximum amount a single customer ordered?
 ```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status = 'COMPLETE' group by order_customer_id order by order_total desc limit 1").show()
-```python
+```
 Q5: Now let's focus on orders which are not complete. Find the total amount of each of those orders i.e. sum all the "order_item_subtotal" for each "order_id". What is the largest across all total amounts?
 ```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status <> 'COMPLETE' group by order_id order by order_total desc limit 1").show()

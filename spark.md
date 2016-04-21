@@ -140,3 +140,42 @@ Q5: Now let's focus on orders which are not complete. Find the total amount of e
 ```python
 sqlCtx.sql("select sum(order_item_subtotal) as order_total from oi_join_o_tbl where order_status <> 'COMPLETE' group by order_id order by order_total desc limit 1").show()
 ```
+
+## Simple Join in Spark Assignment
+Load dataset "join1_FileA.txt":
+```python
+fileA = sc.textFile("input/join1_FileA.txt")
+```
+Let's make sure the file content is correct:
+```python
+fileA.collect()
+```
+Then load the second dataset:
+```python
+fileB = sc.textFile("input/join1_FileB.txt")
+```
+Same verification:
+```python
+fileB.collect()
+```
+Mapper for fileA
+
+[split_fileA](https://github.com/j3rrywan9/bigdata-notes/blob/master/simple_join_fileA_mapper.py)
+
+Mapper for fileB
+
+[split_fileB](https://github.com/j3rrywan9/bigdata-notes/blob/master/simple_join_fileB_mapper.py)
+
+```python
+fileA_data = fileA.map(split_fileA)
+
+fileA_data.collect()
+
+fileB_data = fileB.map(split_fileB)
+
+fileB_data.collect()
+
+fileB_joined_fileA = fileB_data.join(fileA_data)
+
+fileB_joined_fileA.collect()
+```

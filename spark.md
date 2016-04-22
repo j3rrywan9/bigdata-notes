@@ -185,7 +185,7 @@ fileB_joined_fileA.collect()
 ## Advanced Join in Spark Assignment
 
 ### Read show views files
-**gennum** files contain show names and number of viewers, you can read into Spark all of them with a pattern matching, see the **?** which will match either A, B or C:
+**join2_gennum** files contain show names and number of viewers, you can read into Spark all of them with a pattern matching, see the **?** which will match either A, B or C:
 ```python
 PYSPARK_DRIVER_PYTHON=ipython pyspark
 
@@ -200,16 +200,27 @@ will return the first 2 elements of the dataset.
 ### Parse show views files
 Next you need to write a function that splits and parses each line of the dataset.
 ```python
+def split_show_views(line):
+	show, views_in = line.split(",")[0], line.split(",")[1]
+	views = int(views_in)
+	return (show, views)
+
 show_views = show_views_file.map(split_show_views)
 ```
 
 ### Read channel files
+**join2_genchan** files contain show names and channels.
 ```python
 show_channel_file = sc.textFile("input/join2_genchan?.txt")
 ```
 
 ### Parse channel files
+Now you need to write a function that splits and parses each line of the dataset.
 ```python
+def split_show_channel(line):
+	show, channel = line.split(",")[0], line.split(",")[1]
+	return (show, channel)
+
 show_channel = show_channel_file.map(split_show_channel)
 ```
 

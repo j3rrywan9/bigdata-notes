@@ -13,6 +13,8 @@ RDDs have actions, which return values, and tranformations, which return pointer
 
 ### flatMap(func)
 
+### groupByKey
+
 ### reduceByKey(func, [numTasks])
 
 ## Actions
@@ -178,4 +180,77 @@ fileB_data.collect()
 fileB_joined_fileA = fileB_data.join(fileA_data)
 
 fileB_joined_fileA.collect()
+```
+
+## Advanced Join in Spark Assignment
+
+### Read show views files
+**gennum** files contain show names and number of viewers, you can read into Spark all of them with a pattern matching, see the **?** which will match either A, B or C:
+```python
+PYSPARK_DRIVER_PYTHON=ipython pyspark
+
+show_views_file = sc.textFile("input/join2_gennum?.txt")
+```
+Remember you can check what Spark in doing by copying some elements of an RDD back to the driver:
+```python
+show_views_file.take(2)
+```
+will return the first 2 elements of the dataset.
+
+### Parse show views files
+Next you need to write a function that splits and parses each line of the dataset.
+```python
+show_views = show_views_file.map(split_show_views)
+```
+
+### Read channel files
+```python
+show_channel_file = sc.textFile("input/join2_genchan?.txt")
+```
+
+### Parse channel files
+```python
+show_channel = show_channel_file.map(split_show_channel)
+```
+
+### Join the 2 datasets
+Join the 2 datasets using the show name as the key:
+```python
+joined_dataset = show_views.join(show_channel)
+```
+
+### Extract channel as key
+You want to find the total viewers by channel, so you need to create an RDD with the channel as key and viewer counts as value, whichever is the show.
+```python
+def extract_channel_views(show_views_channel):
+	channel_views = show_views_channel[1]
+	channel, views = channel_views[1], channel_views[0]
+	return (channel, views)
+```
+Now you can apply this function to the joined dataset to create an RDD of channel and views:
+```python
+channel_views = joined_dataset.map(extract_channel_views)
+```
+
+### Sum across all channels
+```python
+def sumFunc(accum, n):
+	return accum + n 
+```
+
+```python
+channel_views.reduceByKey(sumFunc).collect()
+```
+
+The output looks like below:
+```
+[(u'XYZ', 5208016),
+ (u'DEF', 8032799),
+ (u'CNO', 3941177),
+ (u'BAT', 5099141),
+ (u'NOX', 2583583),
+ (u'CAB', 3940862),
+ (u'BOB', 2591062),
+ (u'ABC', 1115974),
+ (u'MAN', 6566187)]
 ```

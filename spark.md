@@ -251,6 +251,14 @@ Now you can apply this function to the joined dataset to create an RDD of channe
 ```python
 channel_views = joined_dataset.map(extract_channel_views)
 ```
+Each line in above dataset has the format like **(channel, views)**. For example,
+```python
+channel_views.take(2)
+```
+will return:
+```
+[(u'DEF', 1038), (u'CNO', 1038)]
+```
 
 ### Sum view counts across all channels
 ```python

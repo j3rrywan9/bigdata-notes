@@ -229,6 +229,15 @@ Join the 2 datasets using the show name as the key:
 ```python
 joined_dataset = show_views.join(show_channel)
 ```
+Each line in the joined dataset has the format like **(show, (views, channel))**. For example,
+```python
+joined_dataset.take(2)
+```
+will return:
+```
+[(u'PostModern_Cooking', (1038, u'DEF')),
+ (u'PostModern_Cooking', (1038, u'CNO'))]
+```
 
 ### Extract channel as key
 You want to find the total viewers by channel, so you need to create an RDD with the channel as key and viewer counts as value, whichever is the show.
@@ -243,14 +252,14 @@ Now you can apply this function to the joined dataset to create an RDD of channe
 channel_views = joined_dataset.map(extract_channel_views)
 ```
 
-### Sum across all channels
+### Sum view counts across all channels
 ```python
-def sumFunc(accum, n):
+def sum_func(accum, n):
 	return accum + n 
 ```
 
 ```python
-channel_views.reduceByKey(sumFunc).collect()
+channel_views.reduceByKey(sum_func).collect()
 ```
 
 The output looks like below:

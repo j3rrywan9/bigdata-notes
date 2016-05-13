@@ -41,6 +41,23 @@ The "Decision Tree Predictor" node applies an existing Decision Tree model to th
 
 ## Spark MLlib
 
+### Data Types
+
+#### Arrays
+
+#### Vectors
+
+#### LabeledPoints
+
+### Classification and Regression
+The **spark.mllib** package supports various methods for binay classification, multiclass classification, and regression analysis.
+
+#### Naive Bayes
+
+## Mining Association Rules
+
+## Clustering
+
 ## Resources
 ### The Adult data set
 [Adult Data Set](http://archive.ics.uci.edu/ml/datasets/Adult)
@@ -49,5 +66,7 @@ The "Decision Tree Predictor" node applies an existing Decision Tree model to th
 
 ### The Iris data set
 [Iris Data Set](http://archive.ics.uci.edu/ml/datasets/Iris)
+
+[Association rule learning](https://en.wikipedia.org/wiki/Association_rule_learning)
 
 [Data](https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data)
